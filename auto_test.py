@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 from selenium.webdriver.common.by import By
+from openpyxl import Workbook
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.maximize_window()
@@ -52,7 +53,7 @@ for card in cards:
             By.CLASS_NAME,
             "mb-srp__card__price--amount"
         ).text
-        
+
         price = " ".join(price.split())
         if name and price:
             property_dict[name] = price
@@ -65,3 +66,20 @@ print("\nProperty Dictionary:\n")
 print(property_dict)
 
 print("\nTotal stored:", len(property_dict))
+
+wb = Workbook()
+ws = wb.active
+ws.title = "MagicBricks Data"
+
+# Add headers
+ws.append(["Property Name", "Price"])
+
+# Add data
+for name, price in property_dict.items():
+    ws.append([name, price])
+
+# Save file
+wb.save("magicbricks_properties.xlsx")
+
+print("Excel file created successfully!")
+print("Total stored:", len(property_dict))
