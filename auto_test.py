@@ -20,6 +20,10 @@ driver.switch_to.window(driver.window_handles[-1])
 print("Now URL is:", driver.current_url)
 time.sleep(5)
 
+for i in range(10):
+    driver.execute_script("window.scrollBy(0, 3000);")
+    time.sleep(2)
+
 # properties = driver.find_elements(By.XPATH,"//h2[contains(@class,'mb-srp__card--title')]")
 
 
@@ -79,7 +83,7 @@ for name, price in property_dict.items():
     ws.append([name, price])
 
 # Save file
-wb.save("magicbricks_properties.xlsx")
+wb.save("magicbricks_properties1.xlsx")
 
 print("Excel file created successfully!")
 print("Total stored:", len(property_dict))
