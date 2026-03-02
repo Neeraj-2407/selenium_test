@@ -19,35 +19,84 @@ driver.switch_to.window(driver.window_handles[-1])
 print("Now URL is:", driver.current_url)
 time.sleep(5)
 
+# property_dict = {}
+
+# cards = driver.find_elements(By.XPATH, "//div[contains(@class,'mb-srp__card')]")
+
+# print("Total cards found:", len(cards))
+
+# for card in cards:
+#     try:
+#         # Property Name
+#         name = card.find_element(
+#             By.XPATH,
+#             ".//h2[contains(@class,'mb-srp__card--title')]"
+#         ).text.strip()
+
+#         # Price
+#         price = card.find_element(
+#             By.CLASS_NAME,
+#             "mb-srp__card__price--amount"
+#         ).text
+        
+#         price = " ".join(price.split())
+#         if name and price:
+#             property_dict[name] = price
+
+#     except:
+#         continue
+
+# # Print dictionary
+# print("\nProperty Dictionary:\n")
+# print(property_dict)
+
+# print("\nTotal stored:", len(property_dict))
+
 property_dict = {}
 
+# Find all property cards
 cards = driver.find_elements(By.XPATH, "//div[contains(@class,'mb-srp__card')]")
 
 print("Total cards found:", len(cards))
 
 for card in cards:
     try:
-        # Property Name
+        # ---------------- OWNER NAME ----------------
+        try:
+            owner = card.find_element(
+                By.XPATH,
+                ".//div[contains(@class,'mb-srp__card__ads--name')]"
+            ).text.strip()
+
+            # Remove 'Owner:' text
+            owner = owner.replace("Owner:", "").strip()
+
+        except:
+            owner = "Unknown"
+
+        # ---------------- PROPERTY NAME ----------------
         name = card.find_element(
             By.XPATH,
             ".//h2[contains(@class,'mb-srp__card--title')]"
         ).text.strip()
 
-        # Price
+        # ---------------- PRICE ----------------
         price = card.find_element(
             By.CLASS_NAME,
             "mb-srp__card__price--amount"
         ).text
-        
+
         price = " ".join(price.split())
-        if name and price:
-            property_dict[name] = price
+
+        # ---------------- STORE DATA ----------------
+        if owner and name and price:
+            property_dict[owner] = (name, price)
 
     except:
         continue
 
-# Print dictionary
-print("\nProperty Dictionary:\n")
+# -------- PRINT OUTPUT --------
+print("\nFinal Output:\n")
 print(property_dict)
 
-print("\nTotal stored:", len(property_dict))
+print("\nTotal Owners:", len(property_dict))
